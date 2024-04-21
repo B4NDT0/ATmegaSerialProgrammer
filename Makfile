@@ -1,0 +1,89 @@
+ifeq ($(OS),Windows_NT)     # any windows os
+	detected_OS := Windows
+	POSIXSHELL := 0
+else
+	detected_OS := $(shell uname -s)  # print kernel name
+	POSIXSHELL := 1
+endif
+
+ifeq ($(POSIXSHELL),1) # linux
+	CMDSEP := ;
+	PSEP := /
+	COPYFILE := cp -f
+else # windows
+# SHELL := powershell.exe
+# .SHELLFLAGS := -NoProfile -Command
+	CMDSEP := &
+	PSEP := /
+	COPYFILE := Copy-Item
+	HOME=C:/Users/shk
+
+	avrdude=$(HOME)/.platformio/packages/tool-avrdude/avrdude
+	avrdude_config=$(HOME)/.platformio/packages/tool-avrdude/avrdude.conf
+# avrdude="C:\Program Files (x86)\Arduino\hardware\tools\avr\bin\avrdude"
+# avrdude_config="C:\Program Files (x86)\Arduino\hardware\tools\avr\etc\avrdude.conf"
+	firmware_hex="./data/knitnet_mega_v8.8.8f.hex"
+	firmware_hex="./data/knitnet_mega_v8.6.0.hex"
+
+endif
+
+ifeq ($(POSIXSHELL),1) # linux
+	ifdef port
+		serialPort=/dev/ttyUSB$(port)
+	endif
+else # windows
+	ifdef port
+		serialPort=COM$(port)
+	else
+		serialPort=COM13
+	endif
+endif
+
+
+ifdef port
+	monitorPortFlag=--port $(serialPort)
+	uploadPortFlag=--upload-port $(serialPort)
+else
+	monitorPortFlag=
+	uploadPortFlag=
+endif
+
+baud=115200
+
+all:
+	pio run
+
+clean:
+	pio run --target clean
+
+program:
+	pio run --target program
+
+uploadfs:
+	pio run -v --target uploadfs
+
+monitor:
+	pio device monitor $(monitorPortFlag)
+
+pio_upload:
+	pio run --target upload $(uploadPortFlag)
+
+manual_upload:
+	"~/.platformio/penv/bin/python" "~/.platformio/packages/tool-esptoolpy/esptool.py" --before default_reset --after hard_reset --chip esp8266 $(monitorPortFlag) --baud $(baud) write_flash 0x0 .pio/build/esp12e/firmware.bin
+
+m: monitor
+
+# make, upload and monitor
+um: pio_upload monitor
+
+# make compile commands file (for lsp)
+db:
+	pio run -t compiledb
+
+v: win_send_p_char verify
+
+win_send_p_char:
+	powershell $$port= new-Object System.IO.Ports.SerialPort $(serialPort),115200,None,8,one;  $$port.Open();  $$port.Write([byte[]] (112), 0, 1);  $$port.Close()
+
+verify:
+	$(avrdude) -C $(avrdude_config) -v -patmega2560 -cstk500v1 -P$(serialPort) -b$(baud) -U flash:v:$(firmware_hex):i
