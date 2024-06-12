@@ -1,5 +1,5 @@
-//
-// Created by Ariyan on 6/12/24.
-//
+#include "ATmegaSerialProgrammer.h"
 
-#include "ATmegaSerialProgrammer_Basic_Example.h"
+void setup() {}
+
+void loop() {}
