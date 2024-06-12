@@ -8,7 +8,9 @@ class ATmegaSerialProgrammer {
 public:
 
     bool begin(uint8_t pinReset = 0xFF, uint8_t pinProgEn = 0xFF);
+
     bool begin(const String &fileName, uint8_t pinReset = 0xFF, uint8_t pinProgEn = 0xFF);
+
     static void chipErase();
 
     static bool writeLockBits(uint8_t mode);
