@@ -1,10 +1,10 @@
-#ifndef ATmegaSerialProgrammer_h
-#define ATmegaSerialProgrammer_h
+#ifndef ATMegaSerialProgrammer_h
+#define ATMegaSerialProgrammer_h
 
 #include "Arduino.h"
 #include "LittleFS.h"
 
-class ATmegaSerialProgrammer {
+class ATMegaSerialProgrammer {
 public:
 
     bool begin(uint8_t pinReset = 0xFF, uint8_t pinProgEn = 0xFF);

@@ -1,7 +1,7 @@
-# ATmegaSerialProgrammer
+# ATMegaSerialProgrammer
 
 ## Overview
-ATmegaSerialProgrammer is an Arduino-compatible library designed to facilitate the programming of ATmega microcontrollers through serial communication. This library leverages the ArduinoISP protocol and SPI communication to interact directly with ATmega chips, supporting various operations including chip erase, fuse bit programming, and lock bit settings directly from your Arduino environment.
+ATMegaSerialProgrammer is an Arduino-compatible library designed to facilitate the programming of ATmega microcontrollers through serial communication. This library leverages the ArduinoISP protocol and SPI communication to interact directly with ATmega chips, supporting various operations including chip erase, fuse bit programming, and lock bit settings directly from your Arduino environment.
 
 ## Features
 - **ArduinoISP Protocol**: Utilizes the well-established ArduinoISP protocol for reliable microcontroller programming.
@@ -17,16 +17,16 @@ ATmegaSerialProgrammer is an Arduino-compatible library designed to facilitate t
 2. Open your Arduino IDE, go to `Sketch > Include Library > Add .ZIP Library` and select the downloaded file.
 3. Include the library in your Arduino sketch as follows:
    ```cpp
-   #include "ATmegaSerialProgrammer.h"
+   #include "ATMegaSerialProgrammer.h"
    ```
 
 ## Usage
-To use the library, create an instance of the `ATmegaSerialProgrammer` class, and initialize it with the programming pin configuration. Here’s a simple example that demonstrates initiating the programmer using SPI and ArduinoISP:
+To use the library, create an instance of the `ATMegaSerialProgrammer` class, and initialize it with the programming pin configuration. Here’s a simple example that demonstrates initiating the programmer using SPI and ArduinoISP:
 
 ```cpp
-#include "ATmegaSerialProgrammer.h"
+#include "ATMegaSerialProgrammer.h"
 
-ATmegaSerialProgrammer programmer;
+ATMegaSerialProgrammer programmer;
 
 void setup() {
   // Initialize the programmer
@@ -51,13 +51,13 @@ Contributions are welcome! We are particularly interested in:
 - **Enhance OTA Capabilities**: Contribute to the development of OTA programming features using various cellular or WiFi modules.
 - **Code Improvements and Bug Fixes**: If you have improvements or bug fixes, please fork the repository and use a pull request to add your features or fixes.
 
-To create a comprehensive API Reference section for the README.md document, I'll detail each public function of the `ATmegaSerialProgrammer` library based on the functionalities you've provided. This will include descriptions for initializing the library, operations on fuse and lock bits, and managing the programming process. Here's the updated API Reference section:
+To create a comprehensive API Reference section for the README.md document, I'll detail each public function of the `ATMegaSerialProgrammer` library based on the functionalities you've provided. This will include descriptions for initializing the library, operations on fuse and lock bits, and managing the programming process. Here's the updated API Reference section:
 
 ---
 
 ## API Reference
 
-Below are the detailed descriptions of the public functions provided by the ATmegaSerialProgrammer library:
+Below are the detailed descriptions of the public functions provided by the ATMegaSerialProgrammer library:
 
 - **`begin(uint8_t pinReset, uint8_t pinProgEn)`**:
     - Initializes the programmer with specified pins for the reset and program enable functions. Setting these pins sets up the SPI and prepares the ArduinoISP protocol handling. This function must be called before any programming activities.

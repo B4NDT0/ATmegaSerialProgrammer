@@ -1,5 +1,8 @@
-#include "ATmegaSerialProgrammer.h"
+#include "ATMegaSerialProgrammer.h"
 
-void setup() {}
+ATMegaSerialProgrammer programmer;
+
+void setup() {
+}
 
 void loop() {}

@@ -1,4 +1,4 @@
-#include "ATmegaSerialProgrammer.h"
+#include "ATMegaSerialProgrammer.h"
 
 #include "SPI.h"
 #include "LittleFS.h"
@@ -35,7 +35,7 @@ uint16_t bufferIndex = 0;
 uint32_t currentAddress = 0;
 uint8_t extendedCounter = 0;
 
-bool ATmegaSerialProgrammer::begin(const String &fileName, uint8_t pinReset, uint8_t pinProgEn) {
+bool ATMegaSerialProgrammer::begin(const String &fileName, uint8_t pinReset, uint8_t pinProgEn) {
     if (fileName.isEmpty() || !fileName.endsWith(".hex"))
         return false;
 
@@ -47,7 +47,7 @@ bool ATmegaSerialProgrammer::begin(const String &fileName, uint8_t pinReset, uin
     return begin(pinReset, pinProgEn);
 }
 
-bool ATmegaSerialProgrammer::begin(uint8_t pinReset, uint8_t pinProgEn) {
+bool ATMegaSerialProgrammer::begin(uint8_t pinReset, uint8_t pinProgEn) {
     extendedCounter = 0;
     bufferIndex = 0;
     currentAddress = 0;
@@ -83,71 +83,71 @@ bool ATmegaSerialProgrammer::begin(uint8_t pinReset, uint8_t pinProgEn) {
     return true;
 }
 
-void ATmegaSerialProgrammer::chipErase() {
+void ATMegaSerialProgrammer::chipErase() {
     transferInstruction(MAIN_COMMAND, CHIP_ERASE_CMD, EMPTY, EMPTY);
     busyWait();
 }
 
-uint8_t ATmegaSerialProgrammer::transferInstruction(uint8_t a, uint8_t b, uint8_t c, uint8_t d) {
+uint8_t ATMegaSerialProgrammer::transferInstruction(uint8_t a, uint8_t b, uint8_t c, uint8_t d) {
     SPI.transfer(a);
     SPI.transfer(b);
     SPI.transfer(c);
     return SPI.transfer(d);
 }
 
-void ATmegaSerialProgrammer::busyWait() {
+void ATMegaSerialProgrammer::busyWait() {
     byte busybit;
     do {
         busybit = transferInstruction(LOAD_BUSY_CMD, EMPTY, EMPTY, EMPTY);
     } while (busybit & 0x01);
 }
 
-bool ATmegaSerialProgrammer::writeLockBits(uint8_t mode) {
+bool ATMegaSerialProgrammer::writeLockBits(uint8_t mode) {
     transferInstruction(MAIN_COMMAND, WRITE_LOCK_BITS_CMD, EMPTY, mode);
     busyWait();
     return mode == readLockBits();
 }
 
-bool ATmegaSerialProgrammer::writeLowFuseByte(uint8_t value) {
+bool ATMegaSerialProgrammer::writeLowFuseByte(uint8_t value) {
     transferInstruction(MAIN_COMMAND, WRITE_LOW_FUSE_BYTE_CMD, EMPTY, value);
     busyWait();
     return value == readLowFuseByte();
 }
 
-bool ATmegaSerialProgrammer::writeHighFuseByte(uint8_t value) {
+bool ATMegaSerialProgrammer::writeHighFuseByte(uint8_t value) {
     transferInstruction(MAIN_COMMAND, WRITE_HIGH_FUSE_BYTE_CMD, EMPTY, value);
     busyWait();
     return value == readHighFuseByte();
 }
 
-bool ATmegaSerialProgrammer::writeExtendedFuseByte(uint8_t value) {
+bool ATMegaSerialProgrammer::writeExtendedFuseByte(uint8_t value) {
     transferInstruction(MAIN_COMMAND, WRITE_EXTENDED_FUSE_BYTE_CMD, EMPTY, value);
     busyWait();
     return value == readExtendedFuseByte();
 }
 
-uint8_t ATmegaSerialProgrammer::readLockBits() {
+uint8_t ATMegaSerialProgrammer::readLockBits() {
     return transferInstruction(READ_LOCK_BITS_CMD, EMPTY, EMPTY, EMPTY);
 }
 
-uint8_t ATmegaSerialProgrammer::readLowFuseByte() {
+uint8_t ATMegaSerialProgrammer::readLowFuseByte() {
     return transferInstruction(READ_LOW_FUSE_BYTE_CMD, EMPTY, EMPTY, EMPTY);
 }
 
-uint8_t ATmegaSerialProgrammer::readHighFuseByte() {
+uint8_t ATMegaSerialProgrammer::readHighFuseByte() {
     return transferInstruction(READ_HIGH_BITS_CMD, READ_HIGH_BITS_SECOND_CMD, EMPTY, EMPTY);
 }
 
-uint8_t ATmegaSerialProgrammer::readExtendedFuseByte() {
+uint8_t ATMegaSerialProgrammer::readExtendedFuseByte() {
     return transferInstruction(READ_EXTENDED_FUSE_BYTE_CMD, READ_EXTENDED_FUSE_BYTE_SECOND_CMD, EMPTY, EMPTY);
 }
 
-void ATmegaSerialProgrammer::loadExtendedAddressByte(uint8_t extendedAddressByte) {
+void ATMegaSerialProgrammer::loadExtendedAddressByte(uint8_t extendedAddressByte) {
     transferInstruction(LOAD_EXTENDED_ADDRESS_BYTE_CMD, EMPTY, extendedAddressByte, EMPTY);
     busyWait();
 }
 
-bool ATmegaSerialProgrammer::convertHexToByte(const String &hex, uint8_t &result) {
+bool ATMegaSerialProgrammer::convertHexToByte(const String &hex, uint8_t &result) {
     char *endptr;
     long int value = strtol(hex.c_str(), &endptr, 16);
     if (*endptr == '\0' && value <= 0xFF && value >= 0) {
@@ -158,7 +158,7 @@ bool ATmegaSerialProgrammer::convertHexToByte(const String &hex, uint8_t &result
 }
 
 
-void ATmegaSerialProgrammer::parseHexLine(const String &hexLine) {
+void ATMegaSerialProgrammer::parseHexLine(const String &hexLine) {
     uint8_t recordType;
     if (!convertHexToByte(hexLine.substring(7, 9), recordType)) {
         Serial.println("Error: Invalid record type.");
@@ -204,7 +204,7 @@ void ATmegaSerialProgrammer::parseHexLine(const String &hexLine) {
     }
 }
 
-void ATmegaSerialProgrammer::processPage(uint8_t *pageData) {
+void ATMegaSerialProgrammer::processPage(uint8_t *pageData) {
     int x = 0;
     unsigned int page = currentAddress & 0xFFFFFF80;
     while (x < 256) {
@@ -226,7 +226,7 @@ void ATmegaSerialProgrammer::processPage(uint8_t *pageData) {
     busyWait();
 }
 
-void ATmegaSerialProgrammer::end() {
+void ATMegaSerialProgrammer::end() {
     digitalWrite(resetPin, HIGH);
     currentAddress = 0;
     bufferIndex = 0;
@@ -246,7 +246,7 @@ void ATmegaSerialProgrammer::end() {
     pinMode(resetPin, INPUT);
 }
 
-bool ATmegaSerialProgrammer::startProgramming() {
+bool ATMegaSerialProgrammer::startProgramming() {
     if (isProgramming) return false;
     if (!sketchFile) return false;
     linesProcessed = 0;
@@ -271,7 +271,7 @@ bool ATmegaSerialProgrammer::startProgramming() {
     return true;
 }
 
-bool ATmegaSerialProgrammer::loop() {
+bool ATMegaSerialProgrammer::loop() {
     if (!isProgramming) return false;
     if (!sketchFile) return false;
 
